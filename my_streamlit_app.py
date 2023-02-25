@@ -21,7 +21,8 @@ st.title('Bienvenue chez _ADN tourisme_ 🗼')
 @st.cache_data   
 def get_my_data():    
     # chargement des donnees    
-    data = pd.read_csv('df_21col_19_02_2023.csv')    
+    # data = pd.read_csv('df_21col_19_02_2023.csv')    
+    data = pd.read_csv('df_21col_30_01_2023.zip')    
     return data
 
 def get_my_model():
@@ -58,7 +59,10 @@ st.sidebar.title("Filtrer par Région et Département")
 
 # Filtres sidebar
 # Region, departements
-selected_region = st.sidebar.selectbox("Sélectionner une Région", df["region"].drop_duplicates())
+region_liste = df["region"].drop_duplicates().dropna().to_list()
+region_liste.remove('Île-de-France')
+region_liste.insert(0,'Île-de-France')
+selected_region = st.sidebar.selectbox("Sélectionner une Région",region_liste)
 departement_liste =  df[df["region"] == selected_region]["departement"].drop_duplicates().to_list()
 if selected_region=='Île-de-France':
     departement_liste.insert(0,'Paris')
@@ -194,7 +198,7 @@ elif selected2=='📈Statistique':
     nbre_POI = df.shape[0]
    
     # nbre de department, region
-    region_couverte = df.region.drop_duplicates()
+    region_couverte = region_liste
    
     # departement couvert
     departement_couvert = df.departement.drop_duplicates()
