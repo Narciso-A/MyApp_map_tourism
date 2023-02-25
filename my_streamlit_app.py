@@ -214,10 +214,12 @@ elif selected2=='📈Statistique':
     col4.metric(f'POI ({selected_departement})', nbre_POI_departement)
   
     col3_1, col3_2 = st.columns([1, 1])
+    background_color = '#e3dbdc'
     
     # Affichage par colonne :
     with col3_1:
         fig3 = plt.figure(figsize=(5,5))
+        fig3.patch.set_facecolor(background_color)
         filtered_df = df[df["region"] == selected_region]
         region_counts = filtered_df.groupby("departement")["nom"].nunique()
         sorted_region_counts = region_counts.sort_values(ascending=False)
@@ -227,19 +229,26 @@ elif selected2=='📈Statistique':
             x='nom',
             y=sorted_region_counts.index,
             palette='Blues_d')
+        
+        ax = plt.gca()
+        ax.patch.set_facecolor(background_color)
         plt.title('Répartition des POI par département\n('+selected_region+')')
+        plt.xlabel('Nombre de POI')
         plt.show()
         st.pyplot(fig3)
 
     with col3_2:
         # Repartition POI
         fig2 = plt.figure(figsize=(5,5))
+        fig2.patch.set_facecolor(background_color)
         df_e = df[df["region"] == selected_region]['type_etablissement_extraction']
         idx = df_e.value_counts()[df_e.value_counts()<df_e.value_counts()[3]].index
         df_donut = df_e.apply(lambda x: x if x not in idx else 'Autres')
-        my_circle = plt.Circle( (0,0), 0.7, color='white')
+        my_circle = plt.Circle( (0,0), 0.7, color=background_color)
         df_donut.value_counts(normalize=True).plot(kind='pie',autopct = '%1.1f%%',pctdistance = 0.85, ylabel=None);
         p = plt.gcf()
+        ax = plt.gca()
+        ax.patch.set_facecolor(background_color)
         plt.title("Répartition du nombre d'établissements\n(" + selected_region  +')' )
         plt.ylabel('')
         p.gca().add_artist(my_circle)
@@ -249,13 +258,16 @@ elif selected2=='📈Statistique':
     with col3_3:
 
         fig = plt.figure(figsize=(5,5))
+        fig.patch.set_facecolor(background_color)
         my_df = pd.DataFrame(df[df["region"] == selected_region].isna().mean().sort_values(ascending=False)*100)
-        my_df.columns = ['Valeurs manquantes']
+        my_df.columns = ['Valeurs manquantes (%)']
         my_df = my_df.drop(index=['Unnamed: 0'])
         sns.barplot(data=my_df[:10],
-        x='Valeurs manquantes',
+        x='Valeurs manquantes (%)',
         y=my_df[:10].index,
         palette='dark:salmon_r')
+        ax = plt.gca()
+        ax.patch.set_facecolor(background_color)
         plt.title("Valeurs manquantes\n("+selected_region+')')
         st.pyplot(fig)
 
