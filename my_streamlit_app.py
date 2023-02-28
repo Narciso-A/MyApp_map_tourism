@@ -245,7 +245,7 @@ elif selected2=='📈Statistique':
         idx = df_e.value_counts()[df_e.value_counts()<df_e.value_counts()[3]].index
         df_donut = df_e.apply(lambda x: x if x not in idx else 'Autres')
         my_circle = plt.Circle( (0,0), 0.7, color=background_color)
-        df_donut.value_counts(normalize=True).plot(kind='pie',autopct = '%1.1f%%',pctdistance = 0.85, ylabel=None);
+        df_donut.value_counts(normalize=True).plot(kind='pie',autopct = '%1.1f%%',pctdistance = 0.85, ylabel=None,cmap='RdPu');
         p = plt.gcf()
         ax = plt.gca()
         ax.patch.set_facecolor(background_color)
