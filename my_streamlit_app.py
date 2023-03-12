@@ -221,16 +221,22 @@ elif selected2=='📈Statistique':
         fig3 = plt.figure(figsize=(5,5))
         fig3.patch.set_facecolor(background_color)
         filtered_df = df[df["region"] == selected_region]
-        region_counts = filtered_df.groupby("departement")["nom"].nunique()
+        region_counts = filtered_df.groupby("departement")["identifiant"].nunique()
         sorted_region_counts = region_counts.sort_values(ascending=False)
 
         sns.barplot(
-            data=pd.DataFrame(sorted_region_counts,columns=['nom']), 
-            x='nom',
+            data=pd.DataFrame(sorted_region_counts,columns=['identifiant']), 
+            x='identifiant',
             y=sorted_region_counts.index,
             palette='Blues_d')
         
         ax = plt.gca()
+        ax.bar_label(
+            ax.containers[0],
+            labels=sorted_region_counts.values.astype(str),
+            label_type="center",
+            size=8
+            )
         ax.patch.set_facecolor(background_color)
         plt.title('Répartition des POI par département\n('+selected_region+')')
         plt.xlabel('Nombre de POI')
@@ -267,6 +273,13 @@ elif selected2=='📈Statistique':
         y=my_df[:10].index,
         palette='dark:salmon_r')
         ax = plt.gca()
+        ax.bar_label(
+            ax.containers[0],
+            labels=my_df['Valeurs manquantes (%)'].head(10).apply(lambda x: f"{x:.0f} %" ),
+            label_type="center",
+            size=8,
+            padding=12
+            )
         ax.patch.set_facecolor(background_color)
         plt.title("Valeurs manquantes\n("+selected_region+')')
         st.pyplot(fig)
